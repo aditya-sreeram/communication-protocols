@@ -19,8 +19,8 @@ module spi_master(
         if(reset) begin
             count_sclk<=0;
             count_tx<=0;
-
             cs<=0;
+            sclk<=0;
         end
         else begin
             if(count_sclk<5) count_sclk<=count_sclk+1;
@@ -45,7 +45,6 @@ module spi_master(
                     if(new_data) begin
                         temp<= din;
                         state<= send;
-                        cs<=1;
                     end
                     else {cs,mosi} <=0;
                         
@@ -53,6 +52,7 @@ module spi_master(
                 send: begin
                     if(count_tx<12)begin
                         mosi=temp[11-count_tx];
+                        cs = 1;
                         count_tx=count_tx+1;
                     end
                     else begin
