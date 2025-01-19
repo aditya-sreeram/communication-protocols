@@ -16,12 +16,12 @@ module top_tb;
     end
 
     initial begin
-        @negedge(clk)
+      @(negedge clk)
         reset=1;
-        @negedge(clk)
+      @(negedge clk)
         reset=0;
         #100;
-        @negedge(clk)
+      @(negedge clk)
         din=12'd5;
         new_data=1;
         #500;
@@ -29,8 +29,8 @@ module top_tb;
     end
 
     initial begin
-        $dumpfile("waveform.vcd");
-        $dumpvarse(0,top_tb);
+        $dumpfile("dump.vcd");
+        $dumpvars;
     end
 
 endmodule

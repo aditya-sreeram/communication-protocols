@@ -9,9 +9,9 @@ module spi_master(
 
     reg [11:0] temp;
 
-    typedef enum bit[1:0] {"idle"=2'b00,"enable"=2'b01,"send"=2'b10,"comp"=2'b11} spi_state;
+  typedef enum bit {idle=1'b0,send=1'b1} spi_state;
 
-    spi_state state <= idle; 
+    spi_state state = idle; 
 
     //sclk generation
 
@@ -71,12 +71,12 @@ module spi_master(
 endmodule
 
 module spi_slave(
-    input sclk,cs,mosi,reset
+    input sclk,cs,mosi,reset,
     output reg [11:0] dout,
     output reg done
 );
-    typedef enum bit {"waiting"=0,"send"=1} state;
-    state<=wait;
+  typedef enum bit {waiting=1'b0,send=1'b1} spi_state;
+    spi_state state =waiting;
     int count_rx=0;
 
     reg [11:0] temp;
@@ -84,7 +84,7 @@ module spi_slave(
     //fsm state
 
     always@(posedge sclk)begin
-        if(reset)//pass
+      if(reset) done<=0;
         else begin
             case(state)
                 waiting: begin
