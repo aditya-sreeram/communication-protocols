@@ -5,12 +5,14 @@ module top_tb;
     wire done;
     wire [11:0]dout;
     
-    //delete this
-    // wire cs;
-    // wire mosi;
-    // wire sclk;
+    
 
     top dut(.clk(clk),.new_data(new_data),.reset(reset),.din(din),.done(done),.dout(dout));
+
+    wire sclk;
+
+    assign sclk = dut.master_dut.sclk;
+
 
     // spi_master dut2(.clk(clk),.new_data(new_data),.reset(reset),.din(din),.cs(cs),.mosi(mosi),.sclk(sclk));
 
@@ -28,12 +30,14 @@ module top_tb;
       @(negedge clk)
         reset=0;
         #100;
-      @(negedge clk)
-        din=12'd791;
-        new_data=1;
-        #100;
-        new_data=0;
-        #2000;
+        
+      @(posedge sclk)
+        new_data<=1;
+        din<=12'd791;
+      @(posedge sclk)
+        new_data<=0;
+      @(posedge done)
+      @(posedge sclk)
         $finish;
     end
 

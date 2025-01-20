@@ -95,7 +95,8 @@ module spi_slave(
                         end
                         else begin
                             state<=send;
-                            count_rx=0;
+                            done<=0;
+                            count_rx<=0;
                         end
                     end
                 end
@@ -122,6 +123,7 @@ module top(
     wire mosi;
     wire sclk;
     spi_master master_dut(.clk(clk),.new_data(new_data),.reset(reset),.din(din),.cs(cs),.mosi(mosi),.sclk(sclk));
-    spi_slave slave_dut(.sclk(sclk),.reset(reset),.mosi(mosi),.cs(cs),.dout(dout),.done(done));
+    spi_slave slave_dut(.sclk(sclk),.mosi(mosi),.cs(cs),.reset(reset),.dout(dout),.done(done));
 
 endmodule
+
